@@ -156,6 +156,20 @@
         font-weight: 500;
         font-size: 18px;
         letter-spacing: 1.2px;
+        box-shadow: 1px 1px 1px #919191,
+        1px 1.3px 1px #919191,
+        1px 1.7px 1px #919191,
+        1px 5px 3px rgba(16,16,16,0.4),
+        1px 8px 4px rgba(16,16,16,0.2),
+        1px 12px 8px rgba(16,16,16,0.2);
+
+        &:active {
+          transition: 0.2s;
+          transform: scale(0.95);
+          box-shadow: 1px 1px 1px #919191,
+          1px 1.3px 1px #919191,
+          1px 5px 3px rgba(16,16,16,0.4),;
+        }
       }
     }
     .user-image {

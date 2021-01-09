@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
-import io from 'socket.io-client';
 import "./Chat.scss";
+import io from 'socket.io-client';
 
 class Chat extends Component {
   state = {}
 
   componentDidMount() {
-
+    const socket = io('http://localhost:5000');
   }
 
 
@@ -66,10 +66,10 @@ class Chat extends Component {
 
         <div className="user-profile">
           <div className="user-signout">
-            <button onClick={this.props.onSignOutClick}>Sign Out</button>
+            <button className="unselectable" /*onClick={this.props.onSignOutClick}*/>Sign Out</button>
           </div>
 
-          <div className="user-image">
+          <div className="user-image unselectable">
             <img src={this.props.userData.we.Mt.PK} />
           </div>
           <h3>{this.props.userData.we.Mt.Ed}</h3>

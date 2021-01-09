@@ -7,6 +7,8 @@ import {signIn, signOut} from '../actions'
 import Login from './login/Login';
 import Chat from './chat/Chat';
 
+import './App.css'
+
 class App extends Component {
 
   componentDidMount() {
