@@ -1,17 +1,84 @@
-import React, {Component} from 'react';
+import React, {Component, createElement} from 'react';
 import "./Chat.scss";
 import io from 'socket.io-client';
 
 class Chat extends Component {
-  state = {}
 
-  componentDidMount() {
-    const socket = io('http://localhost:5000');
+  constructor(props) {
+    super(props);
+    this.state = {
+      messageInput: "",
+      sender: this.props.userData.we.Mt,
+      messageReady: ""
+    }
   }
 
 
+  componentDidMount() {
+    this.socket = io('http://localhost:5000');
+
+    this.socket.emit("newUser", this.props.userData.we.Mt);
+    this.socket.on("welcome", data => this.renderNewUser(data));
+    this.socket.on("message", (data) => {
+      console.log(data);
+      let date = `${new Date().getUTCHours()}:${new Date().getUTCMinutes()} h`
+      let from = data.sender.OU === this.props.userData.we.Ea ? "me" : "foreign";
+      let msg = document.createElement("div");
+      msg.classList.add(`message-${from}`);
+      msg.innerHTML = `
+      <div class="message-sender">
+      <img src=${data.sender.PK} alt=${data.sender.qW} />
+
+      </div>
+      <div class="message-text">
+        <p class="p">${data.message}<p/>
+        <p class="p">${date}</p>
+      </div>`;
+      document.querySelector('.chat-messages').appendChild(msg)
+    });
+
+  };
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.messageReady !== this.state.messageReady) {
+      console.log(`State has been changed prev ${prevState.messageReady} curr ${this.state.messageReady}`);
+      this.socket.emit("message", {sender: this.state.sender, message: this.state.messageReady});
+    }
+  }
+
+
+
+  renderNewUser = (data) => {
+    console.log(data)
+    const newUser = document.createElement('div');
+    newUser.classList.add("user");
+    newUser.innerHTML = `
+    <img src=${data.PK} alt={${data.Ed}} />
+    <h4>${data.Ed}</h4>`;
+    document.querySelector(".chat-users").appendChild(newUser)
+  };
+
+  renderMessage = (data) => { };
+
+
+  handleInput = (e) => {
+    e.preventDefault();
+    this.setState({
+      [e.target.name]: e.target.value
+    })
+  }
+
+  handleSubmit = (e) => {
+    e.preventDefault();
+    this.setState({
+      messageReady: this.state.messageInput,
+      messageInput: ""
+    });
+  };
+
+
   render() {
-    console.log(this.props)
+    console.log('The props', this.props)
     return (
       <div className="chat-body">
         <div className="chat-users">
@@ -51,9 +118,19 @@ class Chat extends Component {
 
             </div>
           </div>
+
+
+
           <div className="chat-input">
-            <form id="form">
-              <input id="input" autoComplete="off" /> <button className="input-btn">Send</button>
+            <form id="form" onSubmit={(e) => this.handleSubmit(e)}>
+              <input
+                name="messageInput"
+                value={this.state.messageInput}
+                onChange={(e) => this.handleInput(e)}
+                id="input"
+                autoComplete="off"
+              />
+              <button className="input-btn">Send</button>
             </form>
           </div>
         </div>
@@ -66,7 +143,7 @@ class Chat extends Component {
 
         <div className="user-profile">
           <div className="user-signout">
-            <button className="unselectable" /*onClick={this.props.onSignOutClick}*/>Sign Out</button>
+            <button className="unselectable" onClick={this.props.onSignOutClick}>Sign Out</button>
           </div>
 
           <div className="user-image unselectable">
@@ -80,7 +157,9 @@ class Chat extends Component {
 
       </div>
     );
-  }
+  };
+
+
 }
 
 export default Chat;
