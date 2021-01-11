@@ -16,7 +16,7 @@ class App extends Component {
       // console.log('Library loaded')
       // init returns a promise
       window.gapi.client.init({
-        clientId: "691043229145-h8qm50s1mq5k107ivn50utb7st9fsce0.apps.googleusercontent.com",
+        clientId: "",
         scope: 'email'
       }).then(() => {
         console.log('Init complete');
