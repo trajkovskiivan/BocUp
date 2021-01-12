@@ -1,4 +1,4 @@
-import React, {Component, createElement} from 'react';
+import React, {Component} from 'react';
 import "./Chat.scss";
 import io from 'socket.io-client';
 
@@ -9,7 +9,9 @@ class Chat extends Component {
     this.state = {
       messageInput: "",
       sender: this.props.userData.we.Mt,
-      messageReady: ""
+      socketId: "",
+      messageReady: "",
+      activeUsers: []
     }
   }
 
@@ -17,8 +19,30 @@ class Chat extends Component {
   componentDidMount() {
     this.socket = io('http://localhost:5000');
 
-    this.socket.emit("newUser", this.props.userData.we.Mt);
-    this.socket.on("welcome", data => this.renderNewUser(data));
+    // this.socket.on("connection");
+
+    this.socket.on("socketConnected", ({activeUsers, socketId}) => {
+      // console.log(activeUsers)
+      // console.log(socketId)
+      this.setState({
+        activeUsers,
+        socketId
+      });
+      this.socket.emit("fontEndConnected", {socketId, userData: this.props.userData.we.Mt});
+    });
+    this.socket.on("usersUpdated", (activeUsers) => {
+      console.log("Active Users  ", activeUsers);
+      delete activeUsers[this.state.socketId];
+      this.setState({
+        activeUsers: activeUsers
+      });
+    });
+
+
+
+    // this.socket.emit("newUser", this.props.userData.we.Mt);
+    // this.socket.on("welcome", data => this.renderNewUser(data));
+
     this.socket.on("message", (data) => {
       console.log(data);
       let date = `${new Date().getUTCHours()}:${new Date().getUTCMinutes()} h`
@@ -31,25 +55,45 @@ class Chat extends Component {
 
       </div>
       <div class="message-text">
-        <p class="p">${data.message}<p/>
-        <p class="p">${date}</p>
+        <span class="text-paragraph">${data.message}<span/>
+        <p class="date-paragraph">${date}</p>
       </div>`;
       document.querySelector('.chat-messages').appendChild(msg)
     });
-
   };
 
+
   componentDidUpdate(prevProps, prevState) {
+
     if (prevState.messageReady !== this.state.messageReady) {
       console.log(`State has been changed prev ${prevState.messageReady} curr ${this.state.messageReady}`);
       this.socket.emit("message", {sender: this.state.sender, message: this.state.messageReady});
     }
+  };
+
+  componentWillUnmount() {
+    this.socket.disconnect();
+  };
+
+
+
+  renderActiveUsers = (data) => {
+    // Object.entries(data).map(([keys, values], index) => {
+
+    //   const newUser = document.createElement('div');
+    //   newUser.classList.add("user");
+    //   newUser.innerHTML = `
+    //   <img src=${values.userData.PK} alt={${values.userData.Ed}} />
+    //   <h4>${values.userData.Ed}</h4>`;
+    //   document.querySelector(".chat-users").appendChild(newUser)
+    // })
   }
 
 
 
+
   renderNewUser = (data) => {
-    console.log(data)
+    // console.log(data)
     const newUser = document.createElement('div');
     newUser.classList.add("user");
     newUser.innerHTML = `
@@ -78,7 +122,11 @@ class Chat extends Component {
 
 
   render() {
-    console.log('The props', this.props)
+    // console.log('The props', this.props)
+    // console.log("Users", this.state.allUsers)
+    // Object.entries(this.state.allUsers).map()
+    // console.log("Active users:   ", this.state.activeUsers)
+    // this.renderActiveUsers(this.state.activeUsers)
     return (
       <div className="chat-body">
         <div className="chat-users">
@@ -147,7 +195,7 @@ class Chat extends Component {
           </div>
 
           <div className="user-image unselectable">
-            <img src={this.props.userData.we.Mt.PK} />
+            <img src={this.props.userData.we.Mt.PK} alt={this.props.userData.we.Mt.Ed} />
           </div>
           <h3>{this.props.userData.we.Mt.Ed}</h3>
         </div>

@@ -16,10 +16,10 @@ class App extends Component {
       // console.log('Library loaded')
       // init returns a promise
       window.gapi.client.init({
-        clientId: "",
+        clientId: "691043229145-h8qm50s1mq5k107ivn50utb7st9fsce0.apps.googleusercontent.com",
         scope: 'email'
       }).then(() => {
-        console.log('Init complete');
+        // console.log('Init complete');
         this.auth = window.gapi.auth2.getAuthInstance();
         // this.setState({isSignedIn: this.auth.isSignedIn.get()});
         this.onAuthChange(this.auth.isSignedIn.get());
@@ -56,7 +56,7 @@ class App extends Component {
 }
 
 const mapStateToProps = (state) => {
-  console.log(state);
+  // console.log(state);
   return {
     isSignedIn: state.auth.isSignedIn
   }
