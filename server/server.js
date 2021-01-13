@@ -24,12 +24,10 @@ io.on("connection", socket => {
     socket.broadcast.emit("usersUpdated", USER_ID);
   });
 
-
   socket.on("message", (data) => {
     console.log(data);
     io.sockets.emit("message", data)
   });
-
 
   socket.on("disconnect", () => {
     // delete USER_ID[socket.id];

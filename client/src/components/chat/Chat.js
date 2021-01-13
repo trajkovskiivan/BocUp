@@ -32,22 +32,22 @@ class Chat extends Component {
       });
     });
 
-    this.socket.on("message", function (data) {
+    this.socket.on("message", (data) => {
       console.log(data);
-      // let date = `${new Date().getUTCHours()}:${new Date().getUTCMinutes()} h`
-      // let from = data.sender.OU === this.props.userData.we.Ea ? "me" : "foreign";
-      // let msg = document.createElement("div");
-      // msg.classList.add(`message-${from}`);
-      // msg.innerHTML = `
-      // <div class="message-sender">
-      // <img src=${data.sender.PK} alt=${data.sender.qW} />
+      let date = `${new Date().getUTCHours()}:${new Date().getUTCMinutes()} h`
+      let from = data.sender.OU === this.props.userData.we.Ea ? "me" : "foreign";
+      let msg = document.createElement("div");
+      msg.classList.add(`message-${from}`);
+      msg.innerHTML = `
+      <div class="message-sender">
+      <img src=${data.sender.PK} alt=${data.sender.qW} />
 
-      // </div>
-      // <div class="message-text">
-      //   <span class="text-paragraph">${data.message}<span/>
-      //   <p class="date-paragraph">${date}</p>
-      // </div>`;
-      // document.querySelector('.chat-messages').appendChild(msg)
+      </div>
+      <div class="message-text">
+        <span class="text-paragraph">${data.message}<span/>
+        <p class="date-paragraph">${date}</p>
+      </div>`;
+      document.querySelector('.chat-messages').appendChild(msg)
     });
   };
 
@@ -62,9 +62,8 @@ class Chat extends Component {
     this.socket.disconnect();
   };
 
-
-
   renderActiveUsers = (data) => {
+    // eslint-disable-next-line
     return data.map(({userData, socketId}) => {
       if (this.state.socketId !== socketId)
         return (
@@ -75,11 +74,6 @@ class Chat extends Component {
         )
     });
   };
-
-  renderMessage = (data) => { }
-
-
-
 
   handleInput = (e) => {
     e.preventDefault();
@@ -101,6 +95,7 @@ class Chat extends Component {
     // console.log("Active Users  ", this.state.activeUsers);
     return (
       <div className="chat-body">
+
         <div className="chat-users">
           {/* <div className="user">
             <img src={this.props.userData.we.Mt.PK} alt={this.props.userData.we.Mt.Ed} />
@@ -114,18 +109,15 @@ class Chat extends Component {
           <div className="chat-messages-background">
             <div className="chat-messages">
 
-              <div className="message-foreign">
+              {/* <div className="message-foreign">
                 <div className="message-sender">
-
                   <img src={this.props.userData.we.Mt.PK} alt={this.props.userData.we.Mt.Ed} />
-
                 </div>
                 <div className="message-text">
                   Text from outsider
                   <p>{new Date().getUTCHours()}:{new Date().getUTCMinutes()} h</p>
                 </div>
               </div>
-
 
               <div className="message-me">
                 <div className="message-sender">
@@ -135,12 +127,11 @@ class Chat extends Component {
                   My text
                   <p>{new Date().getUTCHours()}:{new Date().getUTCMinutes()} h</p>
                 </div>
-              </div>
+              </div> */}
+
 
             </div>
           </div>
-
-
 
           <div className="chat-input">
             <form id="form" onSubmit={(e) => this.handleSubmit(e)}>
@@ -155,9 +146,6 @@ class Chat extends Component {
             </form>
           </div>
         </div>
-
-
-
 
 
 
