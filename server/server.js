@@ -14,6 +14,8 @@ let USER_ID = [];
 io.on("connection", socket => {
   // console.log(`New user connected`);
 
+  // socket.join('mainRoom')
+
 
   socket.emit("socketConnected", {activeUsers: USER_ID, socketId: socket.id});
 

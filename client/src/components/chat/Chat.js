@@ -33,22 +33,10 @@ class Chat extends Component {
     });
 
     this.socket.on("message", (data) => {
-      console.log(data);
-      let date = `${new Date().getUTCHours()}:${new Date().getUTCMinutes()} h`
-      let from = data.sender.OU === this.props.userData.we.Ea ? "me" : "foreign";
-      let msg = document.createElement("div");
-      msg.classList.add(`message-${from}`);
-      msg.innerHTML = `
-      <div class="message-sender">
-      <img src=${data.sender.PK} alt=${data.sender.qW} />
-
-      </div>
-      <div class="message-text">
-        <span class="text-paragraph">${data.message}<span/>
-        <p class="date-paragraph">${date}</p>
-      </div>`;
-      document.querySelector('.chat-messages').appendChild(msg)
+      this.renderMessage(data)
     });
+
+
   };
 
 
@@ -74,6 +62,23 @@ class Chat extends Component {
         )
     });
   };
+  renderMessage = (data) => {
+    console.log(data);
+    let date = `${new Date().getUTCHours()}:${new Date().getUTCMinutes()} h`
+    let from = data.sender.OU === this.props.userData.we.Ea ? "me" : "foreign";
+    let msg = document.createElement("div");
+    msg.classList.add(`message-${from}`);
+    msg.innerHTML = `
+    <div class="message-sender">
+    <img src=${data.sender.PK} alt=${data.sender.qW} />
+
+    </div>
+    <div class="message-text">
+      <span class="text-paragraph">${data.message}<span/>
+      <p class="date-paragraph">${date}</p>
+    </div>`;
+    document.querySelector('.chat-messages').appendChild(msg)
+  }
 
   handleInput = (e) => {
     e.preventDefault();
