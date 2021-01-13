@@ -19,11 +19,7 @@ class Chat extends Component {
   componentDidMount() {
     this.socket = io('http://localhost:5000');
 
-    // this.socket.on("connection");
-
     this.socket.on("socketConnected", ({activeUsers, socketId}) => {
-      // console.log(activeUsers)
-      // console.log(socketId)
       this.setState({
         activeUsers,
         socketId
@@ -31,44 +27,35 @@ class Chat extends Component {
       this.socket.emit("fontEndConnected", {socketId, userData: this.props.userData.we.Mt});
     });
     this.socket.on("usersUpdated", (activeUsers) => {
-      console.log("Active Users  ", activeUsers);
-      delete activeUsers[this.state.socketId];
       this.setState({
         activeUsers: activeUsers
       });
     });
 
-
-
-    // this.socket.emit("newUser", this.props.userData.we.Mt);
-    // this.socket.on("welcome", data => this.renderNewUser(data));
-
-    this.socket.on("message", (data) => {
+    this.socket.on("message", function (data) {
       console.log(data);
-      let date = `${new Date().getUTCHours()}:${new Date().getUTCMinutes()} h`
-      let from = data.sender.OU === this.props.userData.we.Ea ? "me" : "foreign";
-      let msg = document.createElement("div");
-      msg.classList.add(`message-${from}`);
-      msg.innerHTML = `
-      <div class="message-sender">
-      <img src=${data.sender.PK} alt=${data.sender.qW} />
+      // let date = `${new Date().getUTCHours()}:${new Date().getUTCMinutes()} h`
+      // let from = data.sender.OU === this.props.userData.we.Ea ? "me" : "foreign";
+      // let msg = document.createElement("div");
+      // msg.classList.add(`message-${from}`);
+      // msg.innerHTML = `
+      // <div class="message-sender">
+      // <img src=${data.sender.PK} alt=${data.sender.qW} />
 
-      </div>
-      <div class="message-text">
-        <span class="text-paragraph">${data.message}<span/>
-        <p class="date-paragraph">${date}</p>
-      </div>`;
-      document.querySelector('.chat-messages').appendChild(msg)
+      // </div>
+      // <div class="message-text">
+      //   <span class="text-paragraph">${data.message}<span/>
+      //   <p class="date-paragraph">${date}</p>
+      // </div>`;
+      // document.querySelector('.chat-messages').appendChild(msg)
     });
   };
 
 
   componentDidUpdate(prevProps, prevState) {
-
     if (prevState.messageReady !== this.state.messageReady) {
-      console.log(`State has been changed prev ${prevState.messageReady} curr ${this.state.messageReady}`);
       this.socket.emit("message", {sender: this.state.sender, message: this.state.messageReady});
-    }
+    };
   };
 
   componentWillUnmount() {
@@ -78,31 +65,20 @@ class Chat extends Component {
 
 
   renderActiveUsers = (data) => {
-    // Object.entries(data).map(([keys, values], index) => {
-
-    //   const newUser = document.createElement('div');
-    //   newUser.classList.add("user");
-    //   newUser.innerHTML = `
-    //   <img src=${values.userData.PK} alt={${values.userData.Ed}} />
-    //   <h4>${values.userData.Ed}</h4>`;
-    //   document.querySelector(".chat-users").appendChild(newUser)
-    // })
-  }
-
-
-
-
-  renderNewUser = (data) => {
-    // console.log(data)
-    const newUser = document.createElement('div');
-    newUser.classList.add("user");
-    newUser.innerHTML = `
-    <img src=${data.PK} alt={${data.Ed}} />
-    <h4>${data.Ed}</h4>`;
-    document.querySelector(".chat-users").appendChild(newUser)
+    return data.map(({userData, socketId}) => {
+      if (this.state.socketId !== socketId)
+        return (
+          <div className="user" key={socketId}>
+            <img src={userData.PK} alt={userData.Ed} />
+            <h4>{userData.Ed}</h4>
+          </div>
+        )
+    });
   };
 
-  renderMessage = (data) => { };
+  renderMessage = (data) => { }
+
+
 
 
   handleInput = (e) => {
@@ -122,18 +98,15 @@ class Chat extends Component {
 
 
   render() {
-    // console.log('The props', this.props)
-    // console.log("Users", this.state.allUsers)
-    // Object.entries(this.state.allUsers).map()
-    // console.log("Active users:   ", this.state.activeUsers)
-    // this.renderActiveUsers(this.state.activeUsers)
+    // console.log("Active Users  ", this.state.activeUsers);
     return (
       <div className="chat-body">
         <div className="chat-users">
-          <div className="user">
+          {/* <div className="user">
             <img src={this.props.userData.we.Mt.PK} alt={this.props.userData.we.Mt.Ed} />
             <h4>{this.props.userData.we.Mt.Ed}</h4>
-          </div>
+          </div> */}
+          {this.state.activeUsers.length > 0 ? this.renderActiveUsers(this.state.activeUsers) : "Ola"}
         </div>
 
 
