@@ -1,5 +1,14 @@
+$chat-nav-height: 2%;
+$chat-messages-background-height: 92%;
+
+$chat-messages-height: 93.5%;
+$chat-input-height: 7%;
+
+
+
+
 .chat-body {
-  height: 100vh;
+  height: 98vh;
   display: flex;
   flex-direction: row;
   width: 100vw;
@@ -42,17 +51,37 @@
     border: 1px solid black;
     display: flex;
     flex-direction: column;
-    justify-content: flex-end;
+    height: 100vh;
+
+
+
+    
+    .chat-navigation {
+      background-color: rgb(247, 169, 169);
+      display: flex;
+      flex-direction: row;
+      height: 5%;
+
+      .private-chat-list {
+        display: flex;
+        margin: 0;
+        
+        li {
+          margin: 5px;
+          list-style: none;
+        }
+      }
+    }
 
     .chat-messages-background {
       background-color: rgb(133, 132, 132);
-      height: 91.5%;
+      height: $chat-messages-background-height;
 
       .chat-messages {
         margin: 10px auto;
         padding: 30px 30px 30px 20px;
         border-radius: 20px;
-        height: 97%;
+        height: $chat-messages-height;
         width: 98%;
         background-color: white;
         display: flex;
@@ -66,6 +95,7 @@
             color: black;
           }
         }
+
         .message-me {
           display: flex;
           flex-direction: row-reverse; 
@@ -74,6 +104,7 @@
             color: aliceblue;
           }        
         }
+
         .message-sender {
           display: flex;
           flex-direction: column-reverse;
@@ -93,46 +124,37 @@
           margin: 10px; 
           border-radius: 40px;
           border: 1px solid black;
-
-          
-          // p {
-          //   margin-top: 1.5px;
-          //   text-align: end;
-          // }
-        }   
+        }           
       }
 
-    }
-    .chat-input {
-      background-color: rgb(58, 55, 55);
-      padding: 5px;
-      height: 60px;
-      display: flex;
-      flex-direction: row;
-      width: 100%;
-
-      #form {
-        text-align: center;
+      .chat-input {
+        background-color: rgb(58, 55, 55);
+        padding: 5px;
+        height: $chat-input-height;
+        display: flex;
+        flex-direction: row;
         width: 100%;
-        input {
-          height: 30px;
-          width: 90%;
-          border-radius: 50px;
-        }
-        button {
-          border-radius: 100px;
-          width: 50px;
-          height: 50px;
-          background-color: blue;
-          color: white;
-          margin-left: 10px;
-        }
+  
+        #form {
+          text-align: center;
+          width: 100%;
+          input {
+            height: 30px;
+            width: 90%;
+            border-radius: 50px;
+          }
+          button {
+            border-radius: 100px;
+            width: 50px;
+            height: 50px;
+            background-color: blue;
+            color: white;
+            margin-left: 10px;
+          }
+        }  
       }
 
     }
-
-
-
   }
 
 

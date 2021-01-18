@@ -1,2 +1,6 @@
 export const SIGN_IN = 'SIGN_IN';
 export const SIGN_OUT = 'SIGN_OUT';
+export const ADD_MAIN_MESSAGE = 'ADD_MAIN_MESSAGE';
+
+export const CREATE_PRIVATE_ROOM = 'CREATE_PRIVATE_ROOM';
+export const CREATE_PRIVATE_MESSAGE = 'CREATE_PRIVATE_MESSAGE'; 

@@ -7,7 +7,12 @@ import {signIn, signOut} from '../actions'
 import Login from './login/Login';
 import Chat from './chat/Chat';
 
-import './App.css'
+import './App.css';
+
+
+document.querySelector("body").addEventListener("contextmenu", (e) => {
+  e.preventDefault()
+})
 
 class App extends Component {
 
