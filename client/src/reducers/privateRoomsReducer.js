@@ -18,14 +18,30 @@ class PrivateRoom {
 };
 
 // eslint-disable-next-line
+export default (state = {}, action) => {
+  switch (action.type) {
+    case CREATE_PRIVATE_ROOM:
+      return {...state, [action.payload.roomId]: action.payload};
+    case CREATE_PRIVATE_MESSAGE:
+      let privateRooms = state;
+      privateRooms[action.payload.room].messages = [...privateRooms[action.payload.room].messages, new PrivateMessage(action.payload.sender, action.payload.message)];
+      return {...privateRooms};
+    default:
+      return state;
+  }
+}
+
+
+/*
 export default (state = [], action) => {
   switch (action.type) {
     case CREATE_PRIVATE_ROOM:
       return [...state, action.payload];
     case CREATE_PRIVATE_MESSAGE:
       state.filter(room => room.roomId === action.payload.room)[0].messages.push(new PrivateMessage(action.payload.sender, action.payload.message))
-      return state;
+      return [...state]
     default:
       return state;
   }
 }
+*/

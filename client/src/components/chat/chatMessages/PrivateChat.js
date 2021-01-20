@@ -8,31 +8,22 @@ class PrivateChat extends Component {
     this.state = {
       messageInput: "",
       messageReady: "",
-      messages: this.props.thisRoom.messages
+      messages: this.props.thisRoom.messages,
+      sender: this.props.userData,
+      receiver: {}
     }
   }
 
   componentDidMount() {
     console.log(this.props)
-    // if (this.props.socket) {
-    //   this.props.socket.on("privateMessage", data => {
-    //     console.log(data);
-    //     this.props.addPrivateMessage(data)
-    //   })
-    // }
+    if (this.props.roomData) {
+      this.setState({receiver: this.props.roomData.users.filter(user => user.userData.OU !== this.props.userData.OU)[0].userData})
+    }
   };
 
 
 
-  UNSAFE_componentWillReceiveProps(nextProps) {
-    // console.log('ComponentWIllRecieveProps   ', nextProps);
-    // if (nextProps.socket !== this.props.socket) {
-    //   nextProps.socket.on("privateMessage", data => {
-    //     console.log(data)
-    //     this.props.addPrivateMessage(data)
-    //   })
-    // }
-  }
+
 
 
 
@@ -49,8 +40,6 @@ class PrivateChat extends Component {
     let sender = this.props.userData.OU;
     let receiver = this.props.roomData.users.filter(user => user.userData.OU !== this.props.userData.OU)[0].userData.OU;
     let receiverSocket = this.props.roomData.users.filter(user => user.userData.OU !== this.props.userData.OU)[0].socketId;
-    console.log(`Sender ${sender}`)
-    console.log(`Receiver ${receiver}`)
     this.props.socket.emit("privateMessage", {message: this.state.messageInput, receiver: receiver, sender: sender, room: this.props.roomData.roomId, receiverSocket: receiverSocket});
     this.props.addPrivateMessage({message: this.state.messageInput, receiver: receiver, sender: sender, room: this.props.roomData.roomId})
 
@@ -61,19 +50,35 @@ class PrivateChat extends Component {
 
 
   render() {
-    // console.log("From PrivateChat  ", this.state)
-    console.log("From PrivateChat  ", this.props.roomData.messages)
     return (
       <React.Fragment>
         <div className="chat-messages" >
-          {/* <h1 onClick={() => this.props.terminateRoom(this.props.num)}>X</h1> */}
           Wellcome to room: {this.props.roomData.roomId}
           <pre>Me: {this.props.userData.Ed}</pre>
           <br />
-          <pre>Receiver: {this.props.roomData.users[1].userData.Ed}</pre>
-          {/* {this.state.messages.map(message => <p>{message.message}</p>)} */}
-          {this.props.thisRoom.messages.map(message => <p>{message.message}</p>)}
+          <pre>Receiver: {this.props.roomData.users.filter(user => user.userData.OU !== this.props.userData.Ou)[0].userData.Ed}</pre>
+          {this.props.thisRoom.messages.map(({message, sender}, index) => {
+            let date = `${new Date().getUTCHours()}:${new Date().getUTCMinutes()} h`
+            let who = sender === this.props.userData.OU ? "me" : "foreign";
+            let from = sender === this.props.userData.OU ? this.state.sender : this.state.receiver;
+
+            console.log(sender)
+            return (
+              <div key={index} className={`message-${who}`}>
+                <div className="message-sender">
+                  <img src={from.PK} alt={from.qW} />
+                </div>
+                <div className="message-text">
+                  <span className="text-paragraph">{message}</span>
+                  <p className="date-paragraph">{date}</p>
+                </div>
+              </div>
+            )
+          })}
         </div >
+
+
+
         <div className="chat-input">
           <form id="form" onSubmit={(e) => this.handleSubmit(e)}>
             <input
@@ -95,7 +100,7 @@ class PrivateChat extends Component {
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    thisRoom: state.privateRooms.filter(room => room.roomId === ownProps.roomData.roomId)[0]
+    thisRoom: Object.values(state.privateRooms).filter(room => room.roomId === ownProps.roomData.roomId)[0]
   }
 }
 

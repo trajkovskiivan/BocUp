@@ -40,13 +40,13 @@ class Chat extends Component {
     });
 
     this.socket.on("createPrivateRoom", data => {
-      console.log(data)
+      // console.log(data)
       // console.log(`So you want to create room ${data.roomId} with ${data.users[0].userData.Ed} and ${data.users[1].userData.Ed}`);
       this.props.createPrivateRoom(data)
     });
 
     this.socket.on('privateMessage', data => {
-      console.log("recieved Private Message", data)
+      // console.log("recieved Private Message", data)
       this.props.addPrivateMessage(data)
     })
   };
@@ -88,12 +88,23 @@ class Chat extends Component {
 
   setActiveRoom = (data) => {
     this.setState({activeChat: data})
+  };
+
+  renderChatLinks = (data) => {
+    let map = new Map(Object.entries(data));
+    // console.log(map)
+    return map.forEach(entry => {
+      return <li className="dummy-private-chat">
+        <Link to={`private-chat-${entry.roomId}`}>New Room</Link>
+      </li>
+    })
   }
 
 
 
   render() {
-    console.log(this.state.activeChat);
+    // console.log(this.props)
+    // console.log(this.state.activeChat);
     // console.log(this.state.activeRooms)
     // console.log(this.props.privateRooms[0].roomId)
     return (
@@ -109,13 +120,17 @@ class Chat extends Component {
                 <h1 className=""><Link to="/">Main Chat</Link></h1>
               </div>
               <ul className="private-chat-list">
-                {this.props.privateRooms && this.props.privateRooms.map(room => {
-                  return <li className="dummy-private-chat" key={room.roomId}>
-                    {/* <button onClick={() => this.setActiveRoom(room.roomId)}>{room.roomId}</button> */}
-                    <Link to={`private-chat-${room.roomId}`}>New Room</Link>
-                    {/* <Link to={`private-chat-${room.roomId}`}>{room.users[1]}</Link> */}
-                  </li>
-                })}
+                {
+                  this.props.privateRooms && this.props.privateRooms.map((room, index) => {
+                    let who = room.users.filter(user => user.userData.OU !== this.props.userData.we.Mt.OU)[0]
+                    console.log(who)
+                    return <li key={index} className="dummy-private-chat" key={room.roomId}>
+                      <Link to={`private-chat-${room.roomId}`}>{who.userData.Ed}</Link>
+                    </li>
+                  })
+                }
+
+
               </ul>
             </nav>
 
@@ -124,13 +139,15 @@ class Chat extends Component {
                 <Route exact path="/"><MainChat num="main" socket={this.socket} userData={this.props.userData.we.Mt} /></Route>
                 {/* <MainChat num="main" socket={this.socket} userData={this.props.userData.we.Mt} />
                 <PrivateChat key={this.state.activeChat} roomData={this.state.activeChat} socket={this.socket} userData={this.props.userData.we.Mt} /> */}
-                {this.props.privateRooms.map(room => {
-                  return (
-                    <Route path={`/private-chat-${room.roomId}`}>
-                      <PrivateChat key={room.roomId} roomData={room} socket={this.socket} userData={this.props.userData.we.Mt} />
-                    </Route>
-                  )
-                })}
+                {
+                  this.props.privateRooms.map((room, index) => {
+                    return (
+                      <Route path={`/private-chat-${room.roomId}`}>
+                        <PrivateChat key={index} roomData={room} messages={room.messages} socket={this.socket} userData={this.props.userData.we.Mt} />
+                      </Route>
+                    )
+                  })
+                }
               </Switch>
             </div>
 
@@ -177,7 +194,7 @@ class Chat extends Component {
 const mapStateToProps = (state) => {
 
   return {
-    privateRooms: state.privateRooms
+    privateRooms: Object.values(state.privateRooms)
   }
 }
 
