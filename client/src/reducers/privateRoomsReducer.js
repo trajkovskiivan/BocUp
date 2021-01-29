@@ -8,7 +8,7 @@ class PrivateMessage {
   }
 };
 
-
+// eslint-disable-next-line
 class PrivateRoom {
   constructor(roomId, senders = [], messages = []) {
     this.roomId = roomId

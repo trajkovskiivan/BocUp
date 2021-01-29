@@ -17,13 +17,9 @@ class PrivateChat extends Component {
   componentDidMount() {
     console.log(this.props)
     if (this.props.roomData) {
-      this.setState({receiver: this.props.roomData.users.filter(user => user.userData.OU !== this.props.userData.OU)[0].userData})
+      this.setState({receiver: this.props.roomData.users.filter(user => user.userData.wR !== this.props.userData.wR)[0].userData})
     }
   };
-
-
-
-
 
 
 
@@ -37,9 +33,9 @@ class PrivateChat extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    let sender = this.props.userData.OU;
-    let receiver = this.props.roomData.users.filter(user => user.userData.OU !== this.props.userData.OU)[0].userData.OU;
-    let receiverSocket = this.props.roomData.users.filter(user => user.userData.OU !== this.props.userData.OU)[0].socketId;
+    let sender = this.props.userData.wR;
+    let receiver = this.props.roomData.users.filter(user => user.userData.wR !== this.props.userData.wR)[0].userData.wR;
+    let receiverSocket = this.props.roomData.users.filter(user => user.userData.wR !== this.props.userData.wR)[0].socketId;
     this.props.socket.emit("privateMessage", {message: this.state.messageInput, receiver: receiver, sender: sender, room: this.props.roomData.roomId, receiverSocket: receiverSocket});
     this.props.addPrivateMessage({message: this.state.messageInput, receiver: receiver, sender: sender, room: this.props.roomData.roomId})
 
@@ -54,25 +50,29 @@ class PrivateChat extends Component {
       <React.Fragment>
         <div className="chat-messages" >
           Wellcome to room: {this.props.roomData.roomId}
-          <pre>Me: {this.props.userData.Ed}</pre>
+          <pre>Me: {this.props.userData.sd}</pre>
           <br />
-          <pre>Receiver: {this.props.roomData.users.filter(user => user.userData.OU !== this.props.userData.Ou)[0].userData.Ed}</pre>
+          <pre>Receiver: {this.props.roomData.users.filter(user => user.userData.wR !== this.props.userData.wR)[0].userData.sd}</pre>
           {this.props.thisRoom.messages.map(({message, sender}, index) => {
             let date = `${new Date().getUTCHours()}:${new Date().getUTCMinutes()} h`
-            let who = sender === this.props.userData.OU ? "me" : "foreign";
-            let from = sender === this.props.userData.OU ? this.state.sender : this.state.receiver;
+            let who = sender === this.props.userData.wR ? "me" : "foreign";
+            let from = sender === this.props.userData.wR ? this.state.sender : this.state.receiver;
 
             console.log(sender)
             return (
               <div key={index} className={`message-${who}`}>
+
                 <div className="message-sender">
-                  <img src={from.PK} alt={from.qW} />
+                  <img src={from.fI} alt={from.bT} />
                 </div>
                 <div className="message-text">
                   <span className="text-paragraph">{message}</span>
                   <p className="date-paragraph">{date}</p>
+                  {/* <span>nams</span> */}
                 </div>
+
               </div>
+
             )
           })}
         </div >

@@ -24,6 +24,18 @@ ReactDOM.render(
 )
 
 
+
+// let rooms = [
+//     {roomId: 10, users: [{id: 1, name: "one"}, {id: 2, name: "two"}], messages: []},
+//     {roomId: 30, users: [{id: 3, name: "three"}, {id: 4, name: "four"}], messages: []},
+//     {roomId: 50, users: [{id: 5, name: "five"}, {id: 6, name: "six"}], messages: []},
+//     {roomId: 70, users: [{id: 1, name: "one"}, {id: 6, name: "six"}], messages: []},
+//     {roomId: 90, users: [{id: 5, name: "five"}, {id: 2, name: "two"}], messages: []},
+//   ]
+
+
+
+
 // let state = {
 //   1: {
 //     users : [1, 2],

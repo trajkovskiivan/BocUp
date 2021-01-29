@@ -27,10 +27,12 @@ export const addMainMessage = (data) => {
 
 
 export const createPrivateRoom = (data) => {
+  // history.push(`/private-chat-${data.roomId}`)
   return {
     type: CREATE_PRIVATE_ROOM,
     payload: data
   };
+
 };
 
 export const addPrivateMessage = ({message, receiver, sender, room}) => {
